@@ -30,12 +30,12 @@ public class AuthController {
         return authRepository.findAll();
     }
     @PostMapping("/corpLogin")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public String login(@ModelAttribute LoginRequest loginRequest) {
         boolean isLoginSuccessful = authService.login(loginRequest.getPlayerId(),loginRequest.getPassword());
         if (isLoginSuccessful) {
-            return ResponseEntity.ok("Login successful");
+            return "redirect:/success";
         } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
+            return "redirect:/error";
         }
     }
 }

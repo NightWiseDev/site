@@ -10,5 +10,13 @@ public class LoginController {
     public String login() {
         return "corpLogin"; // просто возвращает страницу входа
     }
+    @GetMapping("profile")
+    public String profilePage() {
+        return "profile";
+    }
+    @GetMapping("error")
+    public String errorPage() {
+        return "error";
+    }
 }
 
