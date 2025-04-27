@@ -16,9 +16,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // Остальные запросы требуют аутентификации
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // Говорим Spring'у использовать наш кастомный login.html
-                        .loginProcessingUrl("/login") // Куда отправляется форма для обработки логина
-                        .defaultSuccessUrl("/home", true) // Куда перекидывать после успешного входа
+                        .loginPage("/login")
+                        .loginProcessingUrl("/perform_login") // <- обработчик логина
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
