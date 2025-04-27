@@ -1,23 +1,98 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Авторизация</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        /* Стили для красивого оформления */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #292727;
+            display: flex;
+            justify-content: center; /* Центрируем форму по горизонтали */
+            align-items: center; /* Центрируем форму по вертикали */
+            height: 100vh; /* Высота экрана */
+            margin: 0;
+        }
+
+        .registration-form {
+            padding: 30px;
+            border-radius: 10px; /* Скругление углов */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень */
+            width: 300px;
+            color: white;
+        }
+
+        .success-message {
+            margin-top: 25px;
+            padding: 10px;
+            color: #ffff;
+            background-color: #23eb41;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff000d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Темнее при наведении */
+        }
+    </style>
 </head>
 <body>
-<div class="auth-container">
-    <h1 class="auth-title">Вход</h1>
-    <form method="post" th:action="@{/corpLogin}">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <div class="form-group">
-            <input type="text" name="username" placeholder="Логин" required/>
-        </div>
-        <div class="form-group">
-            <input type="password" name="password" placeholder="Пароль" required/>
-        </div>
-        <button type="submit" class="btn">Войти</button>
-    </form>
+
+
+<!-- Форма регистрации -->
+<div class="registration-form" id="regForm">
+    <h1>Вход в личный кабинет</h1>
+
+    <!-- Логин -->
+    <label for="login"></label>
+    <input type="text" id="login" name="login" placeholder="👤 Введите логин">
+
+    <!-- Пароль -->
+    <label for="password"></label>
+    <input type="password" id="password" name="password" placeholder="🔒 Введите пароль">
+
+    <!-- Кнопка регистрации -->
+    <button type="submit">Войти в аккаунт</button>
+</div>
+<div class="success-message" id= "successMessage">
+    Вы успешно зарегистрировались!
+</div>
+<div class="error-message" id="errorMessage" style="display:none;">
+    Неверный логин или пароль.
 </div>
 </body>
 </html>

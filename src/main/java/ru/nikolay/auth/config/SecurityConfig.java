@@ -11,11 +11,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/corporationLogin", "/corpLogin", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/corpLogin", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/corporationLogin") // <-- указываешь свой путь
+                        .loginPage("/corpLogin") // <-- указываешь свой путь
                         .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
