@@ -19,28 +19,20 @@ repositories {
 }
 
 dependencies {
-	// Spring Boot стартер для работы с данными и JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-	// Spring Boot стартер для работы с Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // <--- добавь это
 
-	// Зависимость для работы с MySQL
+	implementation 'org.springframework.security:spring-security-crypto'
+	implementation 'ru:nwsClans:1.0-SNAPSHOT'
+
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
-	// Зависимость для тестов
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-	// Зависимость для Spring Security (включает всё необходимое для безопасности)
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-
-	// Зависимость для работы с BCrypt
-	implementation 'org.springframework.security:spring-security-crypto'
-
-	// Твоя собственная зависимость (если она нужна)
-	implementation 'ru:nwsClans:1.0-SNAPSHOT'
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()

@@ -29,7 +29,7 @@ public class AuthController {
     public List<Auth> getAllUsers() {
         return authRepository.findAll();
     }
-    @PostMapping("/login")
+    @PostMapping("/corpLogin")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         boolean isLoginSuccessful = authService.login(loginRequest.getPlayerId(),loginRequest.getPassword());
         if (isLoginSuccessful) {

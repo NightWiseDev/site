@@ -7,17 +7,15 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/login.html", "/css/**", "/js/**").permitAll() // Разрешаем доступ к login и статике
-                        .anyRequest().authenticated() // Остальные запросы требуют аутентификации
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/corporationLogin", "/corpLogin", "/css/**", "/js/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/perform_login") // <- обработчик логина
+                        .loginPage("/corporationLogin") // <-- указываешь свой путь
                         .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
@@ -26,4 +24,5 @@ public class SecurityConfig {
                 );
         return http.build();
     }
+
 }
