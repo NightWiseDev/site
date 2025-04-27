@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Авторизация</title>
+    <style>
+        :root {
+            --primary-color: #ff000d;
+            --success-color: #23eb41;
+            --error-color: #e02f2f;
+            --bg-color: #292727;
+            --text-color: white;
+            --input-border: #ccc;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 320px;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .auth-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--input-border);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #d9000b;
+        }
+
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: var(--success-color);
+        }
+
+        .alert-error {
+            background-color: var(--error-color);
+        }
+
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <h1 class="auth-title">Вход в личный кабинет</h1>
+
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="login" class="form-label">Логин</label>
+            <input type="text" id="login" class="form-input" placeholder="Введите логин" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="password" id="password" class="form-input" placeholder="Введите пароль" required>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn">
+            <span id="btnText">Войти в аккаунт</span>
+            <span id="loader" class="loader"></span>
+        </button>
+    </form>
+
+    <div id="successMessage" class="alert alert-success">
+        Вы успешно вошли в аккаунт!
+    </div>
+
+    <div id="errorMessage" class="alert alert-error">
+        Неверный логин или пароль
+    </div>
+</div>
+
+<audio id="success-sound" src="/sounds/success_register.mp3"></audio>
+
+<script>
+    async function login() {
+        const loginInput = document.getElementById('login');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const loader = document.getElementById('loader');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        const loginValue = loginInput.value.trim();
+        const passwordValue = passwordInput.value.trim();
+
+        if (!loginValue || !passwordValue) {
+            showError("Заполните все поля");
+            return;
+        }
+
+        if (loginValue.length < 3) {
+            showError("Логин должен содержать минимум 3 символа");
+            return;
+        }
+
+        if (passwordValue.length < 4) {
+            showError("Пароль должен содержать минимум 4 символа");
+            return;
+        }
+
+        btnText.style.display = 'none';
+        loader.style.display = 'block';
+        submitBtn.disabled = true;
+
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'none';
+
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector("meta[name='_csrf']").content
+                },
+                body: JSON.stringify({
+                    playerId: loginValue,
+                    password: passwordValue
+                })
+            });
+
+            if (response.ok) {
+                showSuccess();
+                try {
+                    await document.getElementById('success-sound').play();
+                } catch (e) {
+                    console.log("Не удалось воспроизвести звук:", e);
+                }
+                setTimeout(() => {
+                    window.location.href = '/home';
+                }, 1500);
+            } else {
+                const errorData = await response.text();
+                showError(errorData || "Неверный логин или пароль");
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showError(error.message.includes('Failed to fetch')
+                ? "Сервер недоступен"
+                : "Произошла ошибка при авторизации");
+        } finally {
+            btnText.style.display = 'block';
+            loader.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+    }
+
+    function showError(message) {
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+    }
+
+    function showSuccess() {
+        document.getElementById('successMessage').style.display = 'block';
+    }
+
+    // Назначаем обработчик на форму
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        login();
+    });
+</script>
+</body>
+</html>
