@@ -1,12 +1,10 @@
 package ru.nikolay.auth.controller;
 
-import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.nikolay.auth.model.Auth;
+import ru.nikolay.auth.model.User;
 import ru.nikolay.auth.model.LoginRequest;
-import ru.nikolay.auth.repository.AuthRepository;
+import ru.nikolay.auth.repository.UserRepository;
 import ru.nikolay.auth.service.AuthService;
 
 import java.util.List;
@@ -20,14 +18,14 @@ import java.util.List;
 public class AuthController {
 
     @Autowired
-    private AuthRepository authRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private AuthService authService;
 
     @GetMapping("/auth")
-    public List<Auth> getAllUsers() {
-        return authRepository.findAll();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
     @PostMapping("/corpLogin")
     public String login(@ModelAttribute LoginRequest loginRequest) {

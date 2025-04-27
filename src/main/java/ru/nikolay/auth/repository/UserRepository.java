@@ -6,10 +6,10 @@
     // 🏢 Корпорация: ɴɪɢʜᴛᴡɪꜱᴇᴅᴇᴠ
 
     import org.springframework.data.jpa.repository.JpaRepository;
-    import ru.nikolay.auth.model.Auth;
+    import ru.nikolay.auth.model.User;
 
-    public interface AuthRepository extends JpaRepository<Auth,Integer> {
+    public interface UserRepository extends JpaRepository<User,Integer> {
 
-        Auth findByPlayerId(String playerId);
+        User findByPlayerId(String playerId);
 
     }

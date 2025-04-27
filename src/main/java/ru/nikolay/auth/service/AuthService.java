@@ -8,8 +8,8 @@ package ru.nikolay.auth.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.nikolay.auth.model.Auth;
-import ru.nikolay.auth.repository.AuthRepository;
+import ru.nikolay.auth.model.User;
+import ru.nikolay.auth.repository.UserRepository;
 
 @Service
 public class AuthService {
@@ -18,16 +18,16 @@ public class AuthService {
 
 
     @Autowired
-    private AuthRepository authRepository;
+    private UserRepository userRepository;
 
-    public Auth findUserByLogin(String playerId) {
-        return authRepository.findByPlayerId(playerId);
+    public User findUserByLogin(String playerId) {
+        return userRepository.findByPlayerId(playerId);
     }
     public boolean checkPassword(String rawPassword,String storedPasswordHash) {
         return passwordEncoder.matches(rawPassword,storedPasswordHash);
     }
     public boolean login(String playerId,String password) {
-        Auth user = findUserByLogin(playerId);
+        User user = findUserByLogin(playerId);
         if(user == null)
         {
             return false; //Нет такого пользователя

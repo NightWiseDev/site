@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "mc_auth_accounts")
 
-public class Auth {
+public class User {
     @Id
     private int id;
 
@@ -20,7 +20,7 @@ public class Auth {
     @Column(name = "password_hash")
     private String passwordHash; //bcrypt
 
-    public Auth() {
+    public User() {
         // Для JPA
     }
 

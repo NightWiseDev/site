@@ -79,6 +79,9 @@
     <h1>Вход в личный кабинет</h1>
 
     <form th:action="@{/corpLogin}" method="post">
+        <!-- CSRF-токен (обязательно для Spring Security) -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
         <!-- Логин -->
         <input type="text" id="login" name="playerId" placeholder="👤 Введите логин" required>
 
@@ -88,6 +91,9 @@
         <!-- Кнопка входа -->
         <button type="submit">Войти в аккаунт</button>
     </form>
+</div>
+<div th:if="${param.error}" class="error-message">
+    Неверный логин или пароль
 </div>
 
 <div class="success-message" id= "successMessage">
