@@ -6,6 +6,7 @@ package ru.nikolay.auth.config;
 // 🏢 Корпорация: ɴɪɢʜᴛᴡɪꜱᴇᴅᴇᴠ
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -14,18 +15,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()  // Доступ без аутентификации
-                        .anyRequest().authenticated()  // Все остальные URL требуют входа
+                        .requestMatchers("/login", "/static/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")           // Страница входа
-                        .defaultSuccessUrl("/home")   // После успешного входа
+                        .loginPage("/login") // <- это важно!
                         .permitAll()
                 )
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")  // После выхода
-                        .permitAll()
-                );
+                .logout(Customizer.withDefaults());
+
 
         return http.build();
     }
